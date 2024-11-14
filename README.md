@@ -109,6 +109,12 @@ Build and install the new front-end dependencies (new icon, etc.)
 make cache assets css javascript-prod javascript-extensions
 ```
 
+If no docker
+
+``` bash
+NO_DOCKER=true make cache assets css javascript-prod javascript-extensions
+```
+
 In case you're using Doctrine migrations, you have to create a new migration class
 
 ``` bash
