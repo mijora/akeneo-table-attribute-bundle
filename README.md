@@ -115,7 +115,12 @@ If no docker
 NO_DOCKER=true make cache assets css javascript-prod javascript-extensions
 ```
 
-In case you're using Doctrine migrations, you have to create a new migration class
+**For Akeneo PIM 7.x**
+```bash
+php bin/console doctrine:schema:update --dump-sql --force
+```
+
+**DO NOT USE WITH Akeneo PIM 7.x as it drops important tables!** In case you're using Doctrine migrations, you have to create a new migration class
 
 ``` bash
 php bin/console --env=prod doctrine:migration:diff
