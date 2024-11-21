@@ -16,6 +16,7 @@
         </tfoot>
     </table>
     <input type="hidden" class="table-data" data-locale="<%= value.locale %>" value="<%= _.escape(value.data) %>"
-           data-scope="<%= value.scope %>"/>
-    <%= editMode === 'view' ? 'disabled' : '' %> />
+        data-scope="<%= value.scope %>"
+        <%= editMode === 'view' ? 'disabled' : '' %> 
+    />
 </div>
