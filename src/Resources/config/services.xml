@@ -39,5 +39,9 @@
         <service id="flagbit_table_attribute.mask_item.table" class="Flagbit\Bundle\TableAttributeBundle\Component\Product\Completeness\MaskItemGenerator\TableMaskItem">
             <tag name="akeneo.pim.enrichment.completeness.mask_item_generator"/>
         </service>
+
+        <service id="flagbit_table_attribute.userintent.factory.value" class="Flagbit\Bundle\TableAttributeBundle\Component\Product\UserIntent\Factory\Value\FlagbitTableValueUserIntentFactory">
+            <tag name="pim.enrichment.product.value_user_intent_factory"/>
+        </service>
     </services>
 </container>
