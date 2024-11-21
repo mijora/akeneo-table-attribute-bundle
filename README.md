@@ -49,10 +49,21 @@ All product information related to attributes of type _table_ will be imported/e
 
 ## Installation
 
-Simply install the package with the following command:
+Add Mijora repository to composer.json:
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/mijora/akeneo-table-attribute-bundle"
+    }
+]
+```
+
+Simply install the package from custom branch with the following command:
 
 ``` bash
-composer require flagbit/table-attribute-bundle
+composer require flagbit/table-attribute-bundle:dev-pim-7-support
 ```
 
 ### Enable the bundle
@@ -97,10 +108,11 @@ Clear the cache:
 php bin/console --env=prod cache:clear
 ```
 
-Update the database schema:
+
+Do not Update the database schema as PIM 7.0 has problems with dropping important table columns, command bellow just outputs information on what schema update would do (Carefull not tu run given SQL):
 
 ``` bash
-php bin/console --env=prod doctrine:schema:update --force
+php bin/console --env=prod doctrine:schema:update --dump-sql
 ```
 
 Build and install the new front-end dependencies (new icon, etc.)
@@ -113,23 +125,6 @@ If no docker
 
 ``` bash
 NO_DOCKER=true make cache assets css javascript-prod javascript-extensions
-```
-
-**For Akeneo PIM 7.x**
-```bash
-php bin/console doctrine:schema:update --dump-sql --force
-```
-
-**DO NOT USE WITH Akeneo PIM 7.x as it drops important tables!** In case you're using Doctrine migrations, you have to create a new migration class
-
-``` bash
-php bin/console --env=prod doctrine:migration:diff
-```
-
-and migrate the schema updates:
-
-``` bash
-php bin/console --env=prod doctrine:migrations:migrate
 ```
 
 ## Compatibility
