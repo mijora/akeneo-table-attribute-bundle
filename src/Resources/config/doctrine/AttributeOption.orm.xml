@@ -10,8 +10,8 @@
         </unique-constraints>
 
         <field name="type" column="type" type="string" nullable="true" />
-        <field name="typeConfig" column="type_config" type="json_array" nullable="true" />
-        <field name="constraints" column="constraints" type="json_array" nullable="true" />
+        <field name="typeConfig" column="type_config" type="json" nullable="true" />
+        <field name="constraints" column="constraints" type="json" nullable="true" />
     </entity>
 
 </doctrine-mapping>

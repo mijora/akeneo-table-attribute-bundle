@@ -16,14 +16,17 @@ class AttributeOption extends BaseAttributeOption implements ConstraintConfigInt
     private string $type;
 
     /**
-     * @var array
+     * Null while the column is NULL: the json type, unlike json_array, does not
+     * turn NULL into an empty array, so the getter does it.
+     *
+     * @var array|null
      */
-    private array $constraints;
+    private ?array $constraints = null;
 
     /**
-     * @var array
+     * @var array|null
      */
-    private array $typeConfig;
+    private ?array $typeConfig = null;
 
     /**
      * @return string
@@ -46,7 +49,7 @@ class AttributeOption extends BaseAttributeOption implements ConstraintConfigInt
      */
     public function getConstraints(): array
     {
-        return $this->constraints;
+        return $this->constraints ?? [];
     }
 
     /**
@@ -62,7 +65,7 @@ class AttributeOption extends BaseAttributeOption implements ConstraintConfigInt
      */
     public function getTypeConfig(): array
     {
-        return $this->typeConfig;
+        return $this->typeConfig ?? [];
     }
     
     /**

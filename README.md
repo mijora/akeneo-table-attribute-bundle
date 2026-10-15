@@ -63,7 +63,7 @@ Add Mijora repository to composer.json:
 Simply install the package from custom branch with the following command:
 
 ``` bash
-composer require flagbit/table-attribute-bundle:dev-pim-7-support
+composer require flagbit/table-attribute-bundle:dev-pim-2026-support
 ```
 
 ### Enable the bundle
@@ -109,10 +109,16 @@ php bin/console --env=prod cache:clear
 ```
 
 
-Do not Update the database schema as PIM 7.0 has problems with dropping important table columns, command bellow just outputs information on what schema update would do (Carefull not tu run given SQL):
+Do not use `doctrine:schema:update`: its output also drops important columns of the PIM. Add the columns of the bundle by hand, before the cache is cleared with the bundle enabled:
 
-``` bash
-php bin/console --env=prod doctrine:schema:update --dump-sql
+``` sql
+ALTER TABLE pim_catalog_attribute_option ADD type VARCHAR(255) DEFAULT NULL, ADD type_config JSON DEFAULT NULL, ADD constraints JSON DEFAULT NULL;
+```
+
+The `type_config` and `constraints` columns are mapped as `json`, not as the `json_array` of the PIM 7 branch: that type is deprecated in doctrine/dbal 2 and gone in 3. Both types store the same JSON. If the columns are carried over from a PIM 7 install, drop their `(DC2Type:json_array)` comment:
+
+``` sql
+ALTER TABLE pim_catalog_attribute_option MODIFY type_config JSON DEFAULT NULL, MODIFY constraints JSON DEFAULT NULL;
 ```
 
 Build and install the new front-end dependencies (new icon, etc.)
@@ -131,6 +137,8 @@ NO_DOCKER=true make cache assets css javascript-prod javascript-extensions
 
 This extension supports the latest Akeneo PIM CE/EE stable versions:
 
+* 2026.3 (branch `pim-2026-support`)
+* 7.0 (branch `pim-7-support`)
 * 6.0
 * 5.0
 * 4.0
