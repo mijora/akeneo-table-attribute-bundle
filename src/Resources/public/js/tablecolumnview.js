@@ -149,6 +149,9 @@ define(
                     }, {
                         'type':  'select_from_url',
                         'label': __('flagbit.table_attribute.simpleselect_from_url.label')
+                    }, {
+                        'type':  'select_from_attribute',
+                        'label': __('flagbit.table_attribute.simpleselect_from_attribute.label')
                     }];
 
                     this.render();

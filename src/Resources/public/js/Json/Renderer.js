@@ -4,6 +4,7 @@ define(
         'flagbit/JsonGenerator/Renderer/Number',
         'flagbit/JsonGenerator/Renderer/Select',
         'flagbit/JsonGenerator/Renderer/SelectFromUrl',
+        'flagbit/JsonGenerator/Renderer/SelectFromAttribute',
         'flagbit/JsonGenerator/Renderer/Constraint',
         'flagbit/JsonGenerator/Renderer/Default'
     ],
@@ -12,6 +13,7 @@ define(
         JsonGeneratorRendererNumber,
         JsonGeneratorRendererSelect,
         JsonGeneratorRendererSelectFromUrl,
+        JsonGeneratorRendererSelectFromAttribute,
         JsonGeneratorRendererConstraint,
         JsonGeneratorRendererDefault
     ) {
@@ -60,6 +62,7 @@ define(
                 var renderers = {
                     'select': JsonGeneratorRendererSelect,
                     'select_from_url': JsonGeneratorRendererSelectFromUrl,
+                    'select_from_attribute': JsonGeneratorRendererSelectFromAttribute,
                     'text': JsonGeneratorRendererDefault,
                     'number': JsonGeneratorRendererNumber
                 };
@@ -69,6 +72,8 @@ define(
                         $renderer = new JsonGeneratorRendererSelect($editable, $container);
                     } else if ($container.querySelector('.json-select_from_url-generator')) {
                         $renderer = new JsonGeneratorRendererSelectFromUrl($editable, $container);
+                    } else if ($container.querySelector('.json-select_from_attribute-generator')) {
+                        $renderer = new JsonGeneratorRendererSelectFromAttribute($editable, $container);
                     } else if ($container.querySelector('.json-number-generator')) {
                         $renderer = new JsonGeneratorRendererNumber($editable, $container);
                     } else if ($container.querySelector('.json-constraint-generator')) {

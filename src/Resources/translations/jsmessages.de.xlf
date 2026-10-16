@@ -67,6 +67,21 @@
                 <target>Einfachauswahl aus URL</target>
             </trans-unit>
 
+            <trans-unit id="flagbit_table_attribute_simpleselect_from_attribute_label">
+                <source>flagbit.table_attribute.simpleselect_from_attribute.label</source>
+                <target>Einfachauswahl aus Attribut</target>
+            </trans-unit>
+
+            <trans-unit id="flagbit_table_attribute_simpleselect_from_attribute_attribute_label">
+                <source>flagbit.table_attribute.simpleselect_from_attribute.attribute.label</source>
+                <target>Einfachauswahl-Attribut</target>
+            </trans-unit>
+
+            <trans-unit id="flagbit_table_attribute_simpleselect_from_attribute_invalid_code">
+                <source>flagbit.table_attribute.simpleselect_from_attribute.invalid_code</source>
+                <target>UNGÜLTIGER CODE</target>
+            </trans-unit>
+
             <trans-unit id="flagbit_catalog_table">
                 <source>pim_enrich.entity.attribute.property.type.flagbit_catalog_table</source>
                 <target>Tabelle</target>

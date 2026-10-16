@@ -39,6 +39,13 @@ Provides a _table_ as attribute type where you can define a set of columns of di
 * Number (Integer or Decimal)
 * Simple select
 * Simple select from URL
+* Simple select from attribute
+
+A _Simple select from attribute_ column offers the options of a simple select attribute of the PIM, chosen in the
+settings of the column, instead of options of its own. Its cells store the option codes. They are not validated against
+the options of the attribute: imports and the API store any code, and a code that is not an option of the attribute
+(for example of an option deleted later) stays stored and shows as _INVALID CODE_ in the product edit form, with the
+code as tooltip. Saving the product keeps such a code until another option is chosen for the cell.
 
 #### Import/Export
 

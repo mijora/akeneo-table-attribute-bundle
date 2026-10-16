@@ -8,7 +8,8 @@ define(
         'routing',
         'flagbit/inittable',
         'pim/user-context',
-        'pim/i18n'
+        'pim/i18n',
+        'oro/translator'
     ], function (
         Field,
         _,
@@ -17,7 +18,8 @@ define(
         Routing,
         initTable,
         UserContext,
-        i18n
+        i18n,
+        __
     ) {
         return Field.extend(
             {
@@ -50,15 +52,19 @@ define(
                                                     this.columns[column.id] = column;
                                                 }.bind(this)
                                             );
-                                            initTable.init(this.$('.flagbit-table-attribute'), this.columns);
-                                            // initialize dran & drop sorting
-                                            this.$('.flagbit-table-values tbody').sortable(
-                                                {
-                                                    handle: ".handle",
-                                                    stop: function () {
-                                                        this.updateJson();
-                                                    }.bind(this)
-                                                }
+                                            this.loadAttributeOptions(this.columns).then(
+                                                function () {
+                                                    initTable.init(this.$('.flagbit-table-attribute'), this.columns);
+                                                    // initialize dran & drop sorting
+                                                    this.$('.flagbit-table-values tbody').sortable(
+                                                        {
+                                                            handle: ".handle",
+                                                            stop: function () {
+                                                                this.updateJson();
+                                                            }.bind(this)
+                                                        }
+                                                    );
+                                                }.bind(this)
                                             );
                                         }
                                     }.bind(this)
@@ -66,6 +72,40 @@ define(
                             );
                         }.bind(this)
                     );
+                },
+                /**
+                 * Loads the options of the simple select attributes used by "select_from_attribute" columns into
+                 * their "options". A column whose attribute can not be loaded gets no options.
+                 */
+                loadAttributeOptions: function (columns) {
+                    var requests = _.map(
+                        _.where(columns, {type: 'select_from_attribute'}), function (column) {
+                            column.options = [];
+                            if (!column.config.attribute) {
+                                return $.Deferred().resolve().promise();
+                            }
+
+                            return $.getJSON(
+                                Routing.generate('pim_enrich_attributeoption_get', {identifier: column.config.attribute})
+                            ).then(
+                                function (options) {
+                                    column.options = _.map(
+                                        options, function (option) {
+                                            return {
+                                                id: option.code,
+                                                text: i18n.getLabel(option.labels, UserContext.get('catalogLocale'), option.code)
+                                            };
+                                        }
+                                    );
+                                },
+                                function () {
+                                    return $.Deferred().resolve().promise();
+                                }
+                            );
+                        }
+                    );
+
+                    return $.when.apply($, requests);
                 },
                 getColumnUrl: function () {
                     return $.Deferred().resolve(
@@ -248,6 +288,55 @@ define(
                             }
 
                             var select2 = $('input', td).select2(select2Config);
+                            select2.on(
+                                'select2-close', function () {
+                                    this.updateJson();
+                                }.bind(this)
+                            );
+                        }.bind(this);
+                        break;
+                    case "select_from_attribute":
+                        fieldTemplate = "<input data-type='<%= column.type %>' type='text' name='<%= column.id %>' class='<%= column.id %>' value='<%= _.escape(column.func.formTypeValue(value)) %>' />";
+
+                        parser = function (td) {
+                            var option = $('input', td).select2('data');
+
+                            if (!option || Array.isArray(option)) {
+                                return null;
+                            }
+
+                            return option.id;
+                        };
+
+                        init = function (td, column, value) {
+                            var select2 = $('input', td).select2(
+                                {
+                                    placeholder: ' ',
+                                    dropdownAutoWidth: true,
+                                    data: column.options,
+                                    // A code that is not an option of the attribute (anymore) is kept as it is
+                                    // and shown as invalid, so saving the product does not lose it.
+                                    initSelection: function (element, callback) {
+                                        var code = $(element).val();
+                                        var option = _.findWhere(column.options, {id: code});
+
+                                        callback(option ? option : {
+                                            id: code,
+                                            text: __('flagbit.table_attribute.simpleselect_from_attribute.invalid_code'),
+                                            invalid: true
+                                        });
+                                    },
+                                    formatSelection: function (option, container, escapeMarkup) {
+                                        if (option && option.invalid) {
+                                            container.attr('title', option.id);
+                                        } else {
+                                            container.removeAttr('title');
+                                        }
+
+                                        return $.fn.select2.defaults.formatSelection(option, container, escapeMarkup);
+                                    }
+                                }
+                            );
                             select2.on(
                                 'select2-close', function () {
                                     this.updateJson();

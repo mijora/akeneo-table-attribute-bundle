@@ -25,7 +25,7 @@ class AttributeOptionTypeExtension extends AbstractTypeExtension
             [
             'required' => true,
             'constraints' => [
-                new Choice(['select', 'select_from_url', 'text', 'number']),
+                new Choice(['select', 'select_from_url', 'select_from_attribute', 'text', 'number']),
             ],
             ]
         );
