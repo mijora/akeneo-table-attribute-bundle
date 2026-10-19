@@ -59,6 +59,44 @@ The database keeps the rows as they were saved until the product is saved again,
 the current columns. Until then, adding a column back with the code of a deleted one brings its old cells back.
 Values sent to the PIM are still checked against the columns: a key of a deleted column is rejected.
 
+#### Filtering on the columns
+
+Products and product models can be filtered on the cells of their table values, in the product grid, the API and the
+exports. The rows are indexed as nested documents, so that conditions on several columns can be checked on the same
+row. Text cells are compared ignoring the case. Columns of type _Simple select from URL_ can not be filtered on.
+
+| Column type                                | Operators                                                                                 |
+|--------------------------------------------|-------------------------------------------------------------------------------------------|
+| Text                                       | `=`, `!=`, `CONTAINS`, `DOES NOT CONTAIN`, `STARTS WITH`, `ENDS WITH`, `IN`, `NOT IN`, `EMPTY`, `NOT EMPTY` |
+| Number                                     | `=`, `!=`, `<`, `<=`, `>`, `>=`, `EMPTY`, `NOT EMPTY`                                     |
+| Simple select, Simple select from attribute | `IN`, `NOT IN`, `EMPTY`, `NOT EMPTY`                                                      |
+
+A product matches a condition on a column when one of its rows matches it. With `!=`, `DOES NOT CONTAIN` and `NOT IN`,
+it matches when it has values in the column and none of its rows matches the value; with `EMPTY`, when none of its rows
+has a value in the column.
+
+In the product grid, a table attribute usable in the grid filters gets a filter for each of its columns, named
+"<attribute label> › <column label>", with the filter of the text, number or select attributes.
+
+In the API, the filter is set on the attribute, with the column in the value:
+
+```
+GET /api/rest/v1/products?search={"suppliers_info":[{"operator":"IN","value":{"column":"supplier","value":["gitana"]}}]}
+GET /api/rest/v1/products?search={"suppliers_info":[{"operator":">","value":{"column":"quantity","value":0}}]}
+```
+
+The `SAME ROW` operator takes a list of conditions that must all match the same row. `!=`, `DOES NOT CONTAIN`,
+`NOT IN` and `EMPTY` then apply to the cell of that row:
+
+```
+GET /api/rest/v1/products?search={"suppliers_info":[{"operator":"SAME ROW","value":[
+    {"column":"supplier","operator":"IN","value":["gitana"]},
+    {"column":"quantity","operator":">","value":0}
+]}]}
+```
+
+`EMPTY` and `NOT EMPTY` without value apply to the rows: products without rows, products with at least one row.
+
 #### Import/Export
 
 The extension supports the standard Akeneo product import/export, so you don't need to create any special import/export
@@ -151,6 +189,23 @@ If no docker
 ``` bash
 NO_DOCKER=true make cache assets css javascript-prod javascript-extensions
 ```
+
+#### Update the search index
+
+The bundle adds the mapping of the rows of the table values to the product and product model index. Apply it, then
+index the products and product models again so that their rows are indexed. The index is the one of the
+`APP_PRODUCT_AND_PRODUCT_MODEL_INDEX_NAME` environment variable, `akeneo_pim_product_and_product_model` by default, and
+the PIM advises to update the mapping while the PIM is not used:
+
+``` bash
+php bin/console akeneo:elasticsearch:update-mapping akeneo_pim_product_and_product_model
+php bin/console pim:product:index --all
+php bin/console pim:product-model:index --all
+```
+
+Until they are indexed again, products and product models do not match the filters on columns. Each table attribute,
+for each channel and locale it has values for, adds a nested field to the index, which allows 50 of them by default
+(`index.mapping.nested_fields.limit`).
 
 ## Compatibility
 

@@ -11,5 +11,15 @@
             <argument type="service" id="pim_ui.controller.ajax_option" />
             <tag name="controller.service_arguments"/>
         </service>
+
+        <service id="flagbit_table_attribute.controller.table_column_options"
+                 class="Flagbit\Bundle\TableAttributeBundle\Controller\TableColumnOptionsController"
+                 public="true"
+        >
+            <argument type="service" id="flagbit_table_attribute.query.get_table_columns" />
+            <argument type="service" id="pim_catalog.repository.attribute" />
+            <argument type="service" id="pim_ui.controller.ajax_option" />
+            <tag name="controller.service_arguments"/>
+        </service>
     </services>
 </container>

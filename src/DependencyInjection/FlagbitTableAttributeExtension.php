@@ -37,5 +37,8 @@ class FlagbitTableAttributeExtension extends Extension
         $loader->load('query_builders.xml');
         $loader->load('factories.xml');
         $loader->load('doctrine.xml');
+
+        $yamlLoader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $yamlLoader->load('datagrid.yml');
     }
 }

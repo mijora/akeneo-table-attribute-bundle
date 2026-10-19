@@ -1,3 +1,8 @@
 pim_ui_ajaxentity_list:
   path: /list.json
   defaults: { _controller: flagbit_table_attribute.controller.ajax_option:listAction }
+
+flagbit_table_attribute_column_options:
+  path: /flagbit-table-attribute/column-options
+  defaults: { _controller: flagbit_table_attribute.controller.table_column_options::listAction }
+  methods: [GET]

@@ -6,18 +6,10 @@
 
     <services>
 
-        <service id="flagbit_catalog_table.doctrine.query.filter.columns" class="%pim_catalog.query.elasticsearch.filter.option.class%">
+        <!-- Filter on the cells of the table values, for the API, the product grid and the exports -->
+        <service id="flagbit_catalog_table.doctrine.query.filter.columns" class="Flagbit\Bundle\TableAttributeBundle\Elasticsearch\Filter\TableFilter">
             <argument type="service" id="pim_catalog.validator.helper.attribute_filter"/>
-            <argument type="service" id="pim_catalog.repository.attribute_option"/>
-            <argument type="collection">
-                <argument>flagbit_catalog_table</argument>
-            </argument>
-            <argument type="collection">
-                <argument>IN</argument>
-                <argument>EMPTY</argument>
-                <argument>NOT EMPTY</argument>
-                <argument>NOT IN</argument>
-            </argument>
+            <argument type="service" id="flagbit_table_attribute.query.get_table_columns"/>
             <tag name="pim_catalog.elasticsearch.query.product_filter" priority="30"/>
             <tag name="pim_catalog.elasticsearch.query.product_model_filter" priority="30"/>
             <tag name="pim_catalog.elasticsearch.query.product_and_product_model_filter" priority="30"/>

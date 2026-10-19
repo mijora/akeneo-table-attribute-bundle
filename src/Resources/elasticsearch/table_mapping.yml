@@ -1,0 +1,44 @@
+# Mapping of the rows of table values, see TableValueNormalizer. Added to the configuration files of the product and
+# product model index by RegisterElasticsearchMappingPass. Every row is a nested document, so that conditions on several
+# columns can match the cells of one row.
+#
+# The templates are tried in their order: the cells and their "keyword" and "number" objects first, then the rows,
+# which are the objects two levels under the attribute, and last the channels.
+mappings:
+    dynamic_templates:
+        -
+            flagbit_table_keyword_cells:
+                path_match: 'values.*-flagbit_table.*.keyword.*'
+                mapping:
+                    type: 'keyword'
+                    normalizer: 'text_normalizer'
+                    ignore_above: 8191
+        -
+            flagbit_table_number_cells:
+                path_match: 'values.*-flagbit_table.*.number.*'
+                mapping:
+                    type: 'double'
+        -
+            flagbit_table_keyword_cells_structure:
+                path_match: 'values.*-flagbit_table.*.keyword'
+                match_mapping_type: 'object'
+                mapping:
+                    type: 'object'
+        -
+            flagbit_table_number_cells_structure:
+                path_match: 'values.*-flagbit_table.*.number'
+                match_mapping_type: 'object'
+                mapping:
+                    type: 'object'
+        -
+            flagbit_table_rows:
+                path_match: 'values.*-flagbit_table.*.*'
+                match_mapping_type: 'object'
+                mapping:
+                    type: 'nested'
+        -
+            flagbit_table_channels:
+                path_match: 'values.*-flagbit_table.*'
+                match_mapping_type: 'object'
+                mapping:
+                    type: 'object'

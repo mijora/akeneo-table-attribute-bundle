@@ -11,6 +11,11 @@
       <argument type="service" id="database_connection"/>
     </service>
 
+    <service id="flagbit_table_attribute.query.get_table_columns" class="Flagbit\Bundle\TableAttributeBundle\Query\GetTableColumns"
+             public="false">
+      <argument type="service" id="database_connection"/>
+    </service>
+
     <!-- Brings the table values read from the database to the current columns of their attribute -->
     <service id="flagbit_table_attribute.factory.non_existent_values_filter.table" class="Flagbit\Bundle\TableAttributeBundle\Component\Product\Factory\NonExistentValuesFilter\TableColumnsValuesFilter"
              public="false">

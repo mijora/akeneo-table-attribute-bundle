@@ -40,6 +40,12 @@
             <tag name="akeneo.pim.enrichment.completeness.mask_item_generator"/>
         </service>
 
+        <!-- Indexes the rows of the table values, instead of the normalizer of the text values (priority 90) -->
+        <service id="flagbit_table_attribute.normalizer.indexing.table_value" class="Flagbit\Bundle\TableAttributeBundle\Component\Product\Normalizer\Indexing\TableValueNormalizer">
+            <argument type="service" id="akeneo.pim.structure.query.get_attributes"/>
+            <tag name="pim_indexing_serializer.normalizer" priority="100"/>
+        </service>
+
         <service id="flagbit_table_attribute.userintent.factory.value" class="Flagbit\Bundle\TableAttributeBundle\Component\Product\UserIntent\Factory\Value\FlagbitTableValueUserIntentFactory">
             <tag name="pim.enrichment.product.value_user_intent_factory"/>
         </service>

@@ -1,0 +1,46 @@
+parameters:
+    # Product grid configuration of the table attributes. Their filter is replaced by one filter for each of their
+    # columns, by flagbit_table_attribute.datagrid.configuration.filters_configurator.
+    pim_datagrid.product.attribute_type.flagbit_catalog_table:
+        column:
+            type: product_value_field
+        filter:
+            type: product_value_string
+            ftype: string
+        sorter: ~
+
+services:
+    flagbit_table_attribute.datagrid.configuration.filters_configurator:
+        class: Flagbit\Bundle\TableAttributeBundle\Datagrid\Configuration\TableColumnsFiltersConfigurator
+        decorates: pim_datagrid.datagrid.configuration.product.filters_configurator
+        arguments:
+            - '@.inner'
+            - '@flagbit_table_attribute.query.get_table_columns'
+            - '@pim_user.context.user'
+
+    flagbit_table_attribute.datagrid.configuration.selected_attributes_configurator:
+        class: Flagbit\Bundle\TableAttributeBundle\Datagrid\Configuration\TableColumnsSelectedAttributesConfigurator
+        decorates: pim_datagrid.datagrid.configuration.product.selected_attributes_configurator
+        arguments:
+            - '@.inner'
+            - '@pim_catalog.repository.attribute'
+            - '@pim_user.context.user'
+            - '@oro_datagrid.datagrid.request_params'
+            - '@request_stack'
+
+    flagbit_table_attribute.datagrid.filter.column_number:
+        class: Flagbit\Bundle\TableAttributeBundle\Datagrid\Filter\TableColumnNumberFilter
+        arguments:
+            - '@form.factory'
+            - '@pim_filter.product_utility'
+            - '@pim_catalog.repository.attribute'
+        tags:
+            - { name: oro_filter.extension.orm_filter.filter, type: flagbit_table_column_number }
+
+    flagbit_table_attribute.datagrid.filter.column_choice:
+        class: Flagbit\Bundle\TableAttributeBundle\Datagrid\Filter\TableColumnChoiceFilter
+        arguments:
+            - '@form.factory'
+            - '@pim_filter.product_utility'
+        tags:
+            - { name: oro_filter.extension.orm_filter.filter, type: flagbit_table_column_choice }
