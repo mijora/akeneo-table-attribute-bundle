@@ -47,6 +47,18 @@ the options of the attribute: imports and the API store any code, and a code tha
 (for example of an option deleted later) stays stored and shows as _INVALID CODE_ in the product edit form, with the
 code as tooltip. Saving the product keeps such a code until another option is chosen for the cell.
 
+#### Changing the columns
+
+Columns can be added to and deleted from a table attribute that products already have values for. Whenever products
+are read (API, exports, product edit form, and the products loaded by imports, mass edits and other saves), the rows of
+their table values are brought to the current columns, in the order of the columns: the keys of deleted columns are
+removed and the columns added since the row was saved are set to `null`. A value whose rows already have the columns is
+returned as it is stored.
+
+The database keeps the rows as they were saved until the product is saved again, for any reason, which stores them with
+the current columns. Until then, adding a column back with the code of a deleted one brings its old cells back.
+Values sent to the PIM are still checked against the columns: a key of a deleted column is rejected.
+
 #### Import/Export
 
 The extension supports the standard Akeneo product import/export, so you don't need to create any special import/export

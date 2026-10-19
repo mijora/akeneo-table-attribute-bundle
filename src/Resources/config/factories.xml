@@ -5,5 +5,17 @@
              public="false">
       <tag name="akeneo.pim.enrichment.factory.product_value"/>
     </service>
+
+    <service id="flagbit_table_attribute.query.get_table_column_codes" class="Flagbit\Bundle\TableAttributeBundle\Query\GetTableColumnCodes"
+             public="false">
+      <argument type="service" id="database_connection"/>
+    </service>
+
+    <!-- Brings the table values read from the database to the current columns of their attribute -->
+    <service id="flagbit_table_attribute.factory.non_existent_values_filter.table" class="Flagbit\Bundle\TableAttributeBundle\Component\Product\Factory\NonExistentValuesFilter\TableColumnsValuesFilter"
+             public="false">
+      <argument type="service" id="flagbit_table_attribute.query.get_table_column_codes"/>
+      <tag name="akeneo.pim.enrichment.factory.non_existent_values_filter"/>
+    </service>
   </services>
 </container>
