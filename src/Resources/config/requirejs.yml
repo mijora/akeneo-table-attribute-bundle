@@ -22,3 +22,8 @@ config:
         pim/form/common/attributes/create-button:
             attribute_icons:
                 flagbit_catalog_table: table
+        pim/attribute-edit-form/type-specific-form-registry:
+            formNames:
+                flagbit_catalog_table:
+                    create: flagbit-attribute-form-table
+                    edit:   flagbit-attribute-form-table

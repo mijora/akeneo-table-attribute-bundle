@@ -75,8 +75,9 @@ A product matches a condition on a column when one of its rows matches it. With 
 it matches when it has values in the column and none of its rows matches the value; with `EMPTY`, when none of its rows
 has a value in the column.
 
-In the product grid, a table attribute usable in the grid filters gets a filter for each of its columns, named
-"<attribute label> › <column label>", with the filter of the text, number or select attributes.
+In the product grid, a table attribute usable in the grid filters ("Usable in grid" in the properties of the attribute)
+gets a filter for each of its columns, named "<attribute label> › <column label>", with the filter of the text, number
+or select attributes.
 
 In the API, the filter is set on the attribute, with the column in the value:
 
